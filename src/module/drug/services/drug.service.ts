@@ -3,11 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Drug } from '../entities/drug.entity';
+import { IcdMatcherAdapter } from 'src/module/core/adapter/icd-matcher.adapter';
 
 @Injectable()
 export class DrugsService {
   constructor(
     private readonly dailyMedApiClient: DailyMedApiClient,
+    private readonly icdMatcherAdapter: IcdMatcherAdapter,
 
     @InjectRepository(Drug)
     private readonly drugRepository: Repository<Drug>,
@@ -24,7 +26,7 @@ export class DrugsService {
     if (!drug) {
       drug = new Drug(info);
     }
-    drug.indications = indications;
+    drug.setIndications(indications, this.icdMatcherAdapter);
 
     return await this.drugRepository.save(drug);
   }

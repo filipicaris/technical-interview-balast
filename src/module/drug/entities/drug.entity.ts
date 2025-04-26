@@ -1,5 +1,9 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { Spl } from 'src/module/api-clients/types/daily-med-api.types';
+import { IcdMatcherAdapter } from 'src/module/core/adapter/icd-matcher.adapter';
+import {
+  Spl,
+  SplXmlJSONSection,
+} from 'src/module/api-clients/types/daily-med-api.types';
 
 @Entity('drugs')
 export class Drug {
@@ -23,5 +27,25 @@ export class Drug {
     this.title = input?.title;
     this.version = input?.spl_version;
     this.publishedDate = input?.published_date;
+  }
+
+  setIndications(
+    input: SplXmlJSONSection,
+    icdMatcherAdapter: IcdMatcherAdapter,
+  ) {
+    const indicatedFor = input.component
+      .filter(({ section }) => !!section.title)
+      .map(({ section }) => {
+        const sickness = section.title.replace(/^\d+\.\d+\t/, '');
+        return {
+          sickness,
+          text: section.text,
+          cdi: icdMatcherAdapter.findICDCode(sickness),
+        };
+      });
+
+    this.indications = {
+      indicatedFor,
+    };
   }
 }

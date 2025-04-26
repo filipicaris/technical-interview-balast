@@ -15,9 +15,11 @@ export type SplXmlJSONSection = {
   code: { code: string; codeSystem: string; displayName: string };
   title?: string;
   effectiveTime: { value: string };
-  excerpt?: any;
-  text?: any;
-  component?: SplXmlJSONSection;
+  excerpt?: unknown;
+  text?: unknown;
+  component?: {
+    section: SplXmlJSONSection;
+  }[];
 };
 
 export type SplXmlJSON = {

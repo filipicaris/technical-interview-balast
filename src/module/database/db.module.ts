@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { DynamicModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SettingsAdapter } from '../core/adapter';
+import { SettingsAdapter } from '../core/adapter/settings.adapter';
 
 @Module({})
 export class DbModule {

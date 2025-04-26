@@ -1,9 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
 
+import { IcdMatcherAdapter } from './adapter/icd-matcher.adapter';
 import { SettingsAdapter } from './adapter/settings.adapter';
 
-const providers = [SettingsAdapter];
+const providers = [SettingsAdapter, IcdMatcherAdapter];
 
 @Module({})
 export class CoreModule {
