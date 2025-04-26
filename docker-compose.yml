@@ -1,0 +1,24 @@
+services:
+  pgsql:
+    container_name: 'technical-interview-balast-postgres'
+    image: 'postgres:16'
+    ports:
+      - '${FORWARD_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: 'technical-interview-balast'
+      POSTGRES_DB: 'technical-interview-balast'
+      POSTGRES_USER: 'technical-interview-balast'
+      POSTGRES_PASSWORD: 'technical-interview-balast'
+    volumes:
+      - 'technical-interview-balast-pgsql:/var/lib/postgresql/data'
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+    name: shared-backend
+
+volumes:
+  technical-interview-balast-pgsql:
+    driver: local

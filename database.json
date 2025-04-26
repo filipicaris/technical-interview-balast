@@ -1,0 +1,33 @@
+{
+  "defaultEnv": "default",
+  "default": {
+    "driver": "pg",
+    "user": {
+      "ENV": "TYPEORM_USERNAME"
+    },
+    "password": {
+      "ENV": "TYPEORM_PASSWORD"
+    },
+    "host": {
+      "ENV": "TYPEORM_HOST"
+    },
+    "database": {
+      "ENV": "TYPEORM_DATABASE"
+    },
+    "port": {
+      "ENV": "TYPEORM_PORT"
+    },
+    "ssl": false,
+    "schema": "public"
+  },
+  "test": {
+    "driver": "pg",
+    "user": "test-user",
+    "password": "",
+    "host": "localhost",
+    "database": "test-db",
+    "port": 5434,
+    "ssl": false,
+    "schema": "public"
+  }
+}
