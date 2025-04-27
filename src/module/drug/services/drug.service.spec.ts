@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import * as sinon from 'sinon';
 import { DailyMedApiClient } from 'src/module/api-clients/services/daily-med-client.service';
 import { IcdMatcherAdapter } from 'src/module/core/adapter/icd-matcher.adapter';
@@ -20,9 +21,11 @@ describe('DrugsService', () => {
     sandbox = sinon.createSandbox();
     dailyMedApiClient = sandbox.createStubInstance(DailyMedApiClient);
     icdMatcherAdapter = sandbox.createStubInstance(IcdMatcherAdapter);
+
     repository = sandbox.createStubInstance(
       Repository,
     ) as unknown as sinon.SinonStubbedInstance<Repository<Drug>>;
+    repository.save.callsFake(async (entity: Drug) => entity);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -40,7 +43,7 @@ describe('DrugsService', () => {
     sandbox.restore();
   });
 
-  describe('scrapInformationAboutDrug', () => {
+  describe('.scrapInformationAboutDrug', () => {
     it('should scrap and save drug information', async () => {
       dailyMedApiClient.retrieveDrugInfo.resolves({
         published_date: 'published_date',
@@ -54,11 +57,42 @@ describe('DrugsService', () => {
       } as SplXmlJSONSection);
 
       repository.findOneBy.resolves(null);
-      repository.save.callsFake(async (entity: Drug) => entity);
 
       await expect(
         service.scrapInformationAboutDrug('drugName'),
       ).resolves.toBeDefined();
+
+      const expectedDrug = new Drug({
+        published_date: 'published_date',
+        setid: 'setid',
+        spl_version: 0,
+        title: 'title',
+      });
+      expectedDrug.indications = { indicatedFor: [] };
+
+      sinon.assert.calledOnceWithExactly(repository.save, expectedDrug);
+    });
+  });
+
+  describe('.findById', () => {
+    it('should call repository correctly', async () => {
+      repository.findOneBy.resolves(null);
+
+      await expect(service.findById('setid')).resolves.toBeNull();
+
+      sinon.assert.calledOnceWithExactly(repository.findOneBy, {
+        id: 'setid',
+      });
+    });
+  });
+
+  describe('.delete', () => {
+    it('should call repository correctly', async () => {
+      repository.delete.resolves();
+
+      await expect(service.delete('setid')).resolves.toBe(void 0);
+
+      sinon.assert.calledOnceWithExactly(repository.delete, 'setid');
     });
   });
 });

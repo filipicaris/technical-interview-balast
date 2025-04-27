@@ -10,7 +10,7 @@ export class AuthService {
     private readonly passwordService: PasswordService,
 
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly repository: Repository<User>,
   ) {}
 
   async createUser(input: Omit<User, 'id'>): Promise<User> {
@@ -24,11 +24,11 @@ export class AuthService {
     );
     user = new User({ ...input, password: hashedPassword });
 
-    return await this.userRepository.save(user);
+    return await this.repository.save(user);
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    return await this.userRepository.findOne({
+    return await this.repository.findOne({
       where: { username },
     });
   }

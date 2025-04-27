@@ -12,7 +12,7 @@ export class DrugsService {
     private readonly icdMatcherAdapter: IcdMatcherAdapter,
 
     @InjectRepository(Drug)
-    private readonly drugRepository: Repository<Drug>,
+    private readonly repository: Repository<Drug>,
   ) {}
 
   async scrapInformationAboutDrug(drugName: string) {
@@ -22,20 +22,20 @@ export class DrugsService {
         info.setid,
       );
 
-    let drug = await this.drugRepository.findOneBy({ id: info.setid });
+    let drug = await this.repository.findOneBy({ id: info.setid });
     if (!drug) {
       drug = new Drug(info);
     }
     drug.setIndications(indications, this.icdMatcherAdapter);
 
-    return await this.drugRepository.save(drug);
+    return await this.repository.save(drug);
   }
 
   async findById(id: string) {
-    return await this.drugRepository.findOneBy({ id });
+    return await this.repository.findOneBy({ id });
   }
 
   async delete(id: string) {
-    return await this.drugRepository.delete(id);
+    await this.repository.delete(id);
   }
 }
