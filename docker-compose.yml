@@ -13,6 +13,22 @@ services:
       - 'technical-interview-balast-pgsql:/var/lib/postgresql/data'
     networks:
       - backend
+  app:
+    container_name: 'technical-interview-balast-app'
+    build: .
+    ports:
+      - '3000:3000' # assuming your app runs on port 3000
+    environment:
+      TYPEORM_HOST: pgsql
+      TYPEORM_PORT: 5432
+      TYPEORM_DATABASE: technical-interview-balast
+      TYPEORM_USERNAME: technical-interview-balast
+      TYPEORM_PASSWORD: technical-interview-balast
+      NODE_ENV: production
+    depends_on:
+      - pgsql
+    networks:
+      - backend
 
 networks:
   backend:

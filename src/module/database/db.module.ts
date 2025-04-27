@@ -23,6 +23,8 @@ export class DbModule {
               autoLoadEntities: true,
               synchronize: false,
               connectTimeoutMS: 10000,
+              retryAttempts: 10,
+              retryDelay: 3000,
             };
           },
           dataSourceFactory: async (options) => {

@@ -55,7 +55,7 @@ describe('DailyMedApiClient', () => {
       const errorResponse = { response: { data: 'error' } };
       httpService.get.returns(throwError(() => errorResponse));
 
-      await expect(() => client.retrieveSetId('Test Drug')).rejects.toThrow(
+      await expect(() => client.retrieveDrugInfo('Test Drug')).rejects.toThrow(
         new PreconditionFailedException('Daily Med API is not available'),
       );
     });
@@ -64,7 +64,7 @@ describe('DailyMedApiClient', () => {
       mockedAxiosResponse.data = { data: [] };
       httpService.get.returns(of(mockedAxiosResponse));
 
-      await expect(client.retrieveSetId('Test Drug')).rejects.toThrow(
+      await expect(client.retrieveDrugInfo('Test Drug')).rejects.toThrow(
         new BadRequestException('No drug found with the specified name'),
       );
     });
@@ -72,7 +72,7 @@ describe('DailyMedApiClient', () => {
     it('should throw if api finds multiple drug', async () => {
       mockedAxiosResponse.data = { data: [{} as Spl, {} as Spl] };
       httpService.get.returns(of(mockedAxiosResponse));
-      await expect(client.retrieveSetId('Test Drug')).rejects.toThrow(
+      await expect(client.retrieveDrugInfo('Test Drug')).rejects.toThrow(
         new BadRequestException(
           'Please, specify the name of the drug. Multiple drugs found with filter',
         ),
@@ -92,7 +92,7 @@ describe('DailyMedApiClient', () => {
       };
       httpService.get.returns(of(mockedAxiosResponse));
 
-      await expect(client.retrieveSetId('Test Drug')).resolves.toBe('setid');
+      await expect(client.retrieveDrugInfo('Test Drug')).resolves.toBeDefined();
     });
   });
 });

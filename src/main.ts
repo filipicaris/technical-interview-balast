@@ -1,7 +1,7 @@
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 
-import { AppModule } from './module/app/app.module';
+import { AppModule } from './module/app.module';
 import { ApplicationLogger } from './module/logging';
 import { Configuration } from './config/configuration';
 

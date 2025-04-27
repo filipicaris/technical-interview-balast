@@ -37,7 +37,7 @@ export class Configuration {
   static applySwaggerConfiguration(application: NestExpressApplication) {
     const documentBuilder = new DocumentBuilder()
       .setTitle('Technical Interview')
-      .addBearerAuth();
+      .addBasicAuth();
 
     const document = SwaggerModule.createDocument(
       application,

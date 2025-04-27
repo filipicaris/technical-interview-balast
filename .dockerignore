@@ -1,0 +1,9 @@
+# compiled output
+.vscode
+dist
+node_modules
+
+.gitignore
+.prettierrc
+docker-compose.yml
+.env
